@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>AI Designer</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  </head>
+  <body>
+    <h2>Enter your design prompt</h2>
+    <textarea id="prompt" rows="4" cols="40"></textarea><br><br>
+    <button onclick="sendData()">Send Prompt</button>
+
+    <script>
+      const tg = window.Telegram.WebApp;
+      tg.expand();
+
+      function sendData() {
+        const prompt = document.getElementById("prompt").value;
+        fetch("https://your-n8n-endpoint.com/webhook/prompt", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            prompt: prompt,
+            chat_id: tg.initDataUnsafe.user.id
+          })
+        }).then(() => {
+          tg.close(); // Đóng Web App
+        });
+      }
+    </script>
+  </body>
+</html>
