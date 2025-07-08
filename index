@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>AI T-Shirt Designer</title>
+  <title>Redesign Image</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     body {
@@ -13,16 +13,16 @@
     h2 {
       color: #333;
     }
-    textarea {
+    input {
       width: 100%;
       padding: 10px;
       font-size: 16px;
       border-radius: 8px;
       border: 1px solid #ccc;
-      resize: none;
+      margin-top: 12px;
+      margin-bottom: 16px;
     }
     button {
-      margin-top: 20px;
       width: 100%;
       padding: 12px;
       font-size: 16px;
@@ -38,26 +38,28 @@
   </style>
 </head>
 <body>
-  <h2>🧠 Enter your T-shirt Prompt</h2>
-  <textarea id="prompt" rows="6" placeholder="Describe your T-shirt idea..."></textarea>
-  <button onclick="sendPrompt()">Send Prompt</button>
+  <h2>🔗 Enter Image URL to Redesign</h2>
+
+  <input type="text" id="imageUrl" placeholder="https://example.com/image.png" />
+
+  <button onclick="sendToN8N()">🎨 Redesign</button>
 
   <script>
     const tg = window.Telegram.WebApp;
     tg.expand();
 
-    function sendPrompt() {
-      const prompt = document.getElementById("prompt").value;
+    function sendToN8N() {
+      const imageUrl = document.getElementById("imageUrl").value;
 
       fetch("https://leo96.app.n8n.cloud/webhook-test/telegram-ai", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          prompt: prompt,
-          chat_id: tg.initDataUnsafe.user?.id || tg.initDataUnsafe.chat?.id
+          image_url: imageUrl,
+          chat_id: tg.initDataUnsafe.user?.id
         })
       }).then(() => {
-        tg.close();
+        tg.close(); // đóng Web App sau khi gửi
       });
     }
   </script>
